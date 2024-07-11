@@ -8,4 +8,5 @@ rust:
 	./scripts/rust.sh
 
 clean:
+	rm -rf ./src/rust/rust
 	git clean -fdxq && git reset --hard

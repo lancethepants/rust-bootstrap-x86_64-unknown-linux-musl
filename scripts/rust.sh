@@ -10,7 +10,7 @@ RPATH=$PREFIX/lib
 DEST=$BASE$PREFIX
 LDFLAGS="-L$DEST/lib -s -Wl,--dynamic-linker=$PREFIX/lib/ld-musl-x86_64.so.1 -Wl,-rpath,$RPATH -Wl,-rpath-link,$DEST/lib"
 CPPFLAGS="-I$DEST/include"
-CFLAGS=$EXTRACFLAGS
+CFLAGS="-march=x86-64-v2"
 CXXFLAGS=$CFLAGS
 CONFIGURE="./configure --prefix=$PREFIX --host=x86_64-tomatoware-linux-musl"
 MAKE="make -j`nproc`"
@@ -20,7 +20,7 @@ export CCACHE_DIR=$HOME/.ccache_rust
 # OPENSSL # #################################################################
 ########### #################################################################
 
-OPENSSL_VERSION=1.1.1t
+OPENSSL_VERSION=3.3.1
 
 cd $SRC/openssl
 
@@ -63,7 +63,7 @@ fi
 # RUST # ####################################################################
 ######## ####################################################################
 
-RUST_VERSION=1.69.0
+RUST_VERSION=1.79.0
 RUST_VERSION_REV=1
 
 cd $SRC/rust
@@ -89,9 +89,9 @@ fi
 
 if [ ! -f .installed ]; then
 
-	CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS='-Ctarget-feature=-crt-static -Cstrip=symbols' \
-	CFLAGS_x86_64_unknown_linux_musl="" \
-	CXXFLAGS_x86_64_unknown_linux_musl="" \
+	CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS='-Ctarget-feature=-crt-static -Cstrip=symbols -Clink-arg=-Wl,--dynamic-linker=/mmc/lib/ld-musl-x86_64.so.1 -Clink-arg=-Wl,-rpath,/mmc/lib' \
+	CFLAGS_x86_64_unknown_linux_musl="-march=x86-64-v2" \
+	CXXFLAGS_x86_64_unknown_linux_musl="-march=x86-64-v2" \
 	x86_64_UNKNOWN_LINUX_MUSL_OPENSSL_LIB_DIR=$DEST/lib \
 	x86_64_UNKNOWN_LINUX_MUSL_OPENSSL_INCLUDE_DIR=$DEST/include \
 	x86_64_UNKNOWN_LINUX_MUSL_OPENSSL_NO_VENDOR=1 \
